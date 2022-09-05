@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useGetVideosQuery } from "../../features/api/apiSlice";
 import Error from "../ui/Error";
 import VideoLoader from "../ui/loaders/VideoLoader";
@@ -5,9 +6,16 @@ import Video from "./Video";
 
 export default function Videos() {
 
-    const { data: videos, isLoading, isError } = useGetVideosQuery();
+    const [request, setRequest] = useState(false);
 
-    console.log("videos", videos)
+    const { data: videos, isLoading, isError } = useGetVideosQuery(undefined, {
+        skip: !request,
+        // pollingInterval: 5000
+    });
+
+    useEffect(() => {
+        setRequest(true)
+    }, []);
 
     // decide what to render
     let content = null;
